@@ -8,6 +8,7 @@ import {MenuItem,
 import InfoBox from './InfoBox';
 import Map from './Map';
 import Table from './Table'
+import './util'
 import './App.css';
 
 
@@ -45,7 +46,8 @@ function App() {
               value: country.countryInfo.iso2, // US, UK, FR
             }));
 
-            setTableData();
+            const sortedData = sortedData(data);
+            setTableData(data);
             setCountries(countries);
           });
         };
