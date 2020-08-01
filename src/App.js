@@ -7,16 +7,15 @@ import {MenuItem,
         from '@material-ui/core';
 import InfoBox from './InfoBox';
 import Map from './Map';
-import Table from './Table'
-import './util'
+import Table from './Table';
 import './App.css';
-
+import { sortData } './util';
 
 
 function App() {
     const [countries, setCountries] = useState([]);
-    const [country, setCountry] = useState('worldwide');
-    const [countryInfo, setCountryInfo] = useState([]);
+    const [country, setCountry] = useState("worldwide");
+    const [countryInfo, setCountryInfo] = useState({});
     const [tableData, setTableData] = useState([]);
 
     // STATE = How to write a variable in REACT <<<
@@ -32,24 +31,23 @@ function App() {
       .then(data => {
         setCountryInfo(data);
       });
-    }, [])
+    }, []);
 
     useEffect(() => {
       //async -> send a request, wait for it, do something with it
-    
       const getCountriesData = async () => {
         await fetch("https://disease.sh/v3/covid-19/countries")
-        .then((response) => response.json())
-        .then((data) => {
-          const countries = data.map((country) => ({
-              name: country.country, // United States, United Kingdom
-              value: country.countryInfo.iso2, // US, UK, FR
-            }));
+          .then((response) => response.json())
+          .then((data) => {
+            const countries = data.map((country) => ({
+                name: country.country, // United States, United Kingdom
+                value: country.countryInfo.iso2, // US, UK, FR
+              }));
 
-            const sortedData = sortedData(data);
-            setTableData(data);
-            setCountries(countries);
-          });
+              const sortedData = sortData(data);
+              setTableData(sortedData);
+              setCountries(countries);
+            });
         };
         getCountriesData();
       }, []);
@@ -98,8 +96,8 @@ function App() {
       </div>
         <div className="app__stats">
           <InfoBox title="Coronavirus Cases" cases={countryInfo.todayCases} total={countryInfo.cases} />
-          <InfoBox title="Recovered" cases={countryInfo.todayRecovered} total={countryInfo.recovered}/>
-          <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths}/>
+          <InfoBox title="Recovered" cases={countryInfo.todayRecovered} total={countryInfo.recovered} />
+          <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths} />
           
           {/*InfoBox*/}
           {/*InfoBox*/}
